@@ -1,0 +1,31 @@
+﻿@model IEnumerable<MoshMVC.Models.Customer>
+
+@{
+    ViewBag.Title = "Customers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Customer</h2>
+
+@if (!Model.Any())
+{
+    <p> Not Found</p>
+    return;
+}
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Customer</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var customer in Model)
+        {
+            <tr>
+                <td>@Html.ActionLink(customer.Name, "Detail", "Customers", new { id = customer.Id }, null)</td>
+            </tr>
+        }
+    </tbody>
+</table>
+

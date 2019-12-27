@@ -1,0 +1,34 @@
+﻿@model IEnumerable<MoshMVC.Models.Movie>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Movie</h2>
+
+@if (!Model.Any())
+{
+    <p>
+        No Records.
+    </p>
+    return;
+}
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>MovieId</th>
+            <th>MovieName</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var movie in Model)
+        {
+            <tr>
+                <td>@movie.Id</td>
+                <td>@movie.Name</td>
+            </tr>
+        }
+    </tbody>
+</table>
+

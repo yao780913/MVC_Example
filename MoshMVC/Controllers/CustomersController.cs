@@ -1,4 +1,5 @@
 ﻿using MoshMVC.Models;
+using System.Data.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,25 +10,23 @@ namespace MoshMVC.Controllers
 {
     public class CustomersController : Controller
     {
-        readonly IEnumerable<Customer> customers;
-
+        private EFDbContext _dbContext;
         public CustomersController()
         {
-            customers = new List<Customer>() 
-            {
-                new Customer{ Id = 1, Name = "Bill"},
-                new Customer{ Id = 2, Name = "William"}
-            };
+            _dbContext = new EFDbContext();
         }
         // GET: Customers
         public ActionResult Index()
         {
-            return View(customers);
+            return View(_dbContext.Customers.Include(c => c.MembershipType));
         }
 
         public ActionResult Detail(int id)
         {
-            var customer = customers.FirstOrDefault(c => c.Id == id);
+            var customer = _dbContext.Customers
+                .Include(c => c.MembershipType)
+                .FirstOrDefault(c => c.Id == id);
+
             if (customer == null)
                 return HttpNotFound();
 

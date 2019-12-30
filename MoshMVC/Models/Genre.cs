@@ -5,11 +5,9 @@ using System.Web;
 
 namespace MoshMVC.Models
 {
-    public class Customer
+    public class Genre
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public MembershipType MembershipType { get; set; }
-        public int MembershipTypeId { get; set; }
     }
 }

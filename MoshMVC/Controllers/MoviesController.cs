@@ -1,4 +1,5 @@
 ﻿using MoshMVC.Models;
+using System.Data.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,20 +10,29 @@ namespace MoshMVC.Controllers
 {
     public class MoviesController : Controller
     {
-        readonly IEnumerable<Movie> movies;
+        private EFDbContext _dbContext;
 
         public MoviesController()
         {
-            movies = new List<Movie>() 
-            {
-                new Movie{ Id = 1, Name = "Mission Impossible"},
-                new Movie{ Id = 2, Name = "Mission Impossible 2"},
-            };
+            _dbContext = new EFDbContext();
         }
         // GET: Movies
         public ActionResult Index()
         {
+            var movies = _dbContext.Movies.Include( m => m.Genre);
             return View(movies);
+        }
+
+        public ActionResult Detail(int id)
+        {
+            var movie = _dbContext.Movies
+                .Include(m => m.Genre)
+                .SingleOrDefault(m => m.Id == id);
+
+            if (movie == null)
+                return HttpNotFound();
+
+            return View(movie);
         }
     }
 }

@@ -8,7 +8,7 @@ using System.Web.Mvc;
 
 namespace MoshMVC.Controllers
 {
-    public class CustomersController : Controller
+    public partial class CustomersController : Controller
     {
         private EFDbContext _dbContext;
         public CustomersController()
@@ -16,12 +16,12 @@ namespace MoshMVC.Controllers
             _dbContext = new EFDbContext();
         }
         // GET: Customers
-        public ActionResult Index()
+        public virtual ActionResult Index()
         {
             return View(_dbContext.Customers.Include(c => c.MembershipType));
         }
 
-        public ActionResult Detail(int id)
+        public virtual ActionResult Detail(int id)
         {
             var customer = _dbContext.Customers
                 .Include(c => c.MembershipType)

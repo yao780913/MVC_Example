@@ -10,7 +10,7 @@
 @using (Html.BeginForm("Save", "Movies")) 
 {
     @Html.AntiForgeryToken()
-    
+    @Html.ValidationSummary(true, "Please fix the following errors.")
     <div class="form-horizontal">
         <h4>Movie</h4>
         <hr />

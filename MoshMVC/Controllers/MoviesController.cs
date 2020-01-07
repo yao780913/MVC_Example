@@ -40,6 +40,7 @@ namespace MoshMVC.Controllers
         {
             var viewModel = new MoviesFormViewModel()
             {
+                Movie = new Movie(),
                 Genres = _dbContext.Genres.ToList()
             };
 

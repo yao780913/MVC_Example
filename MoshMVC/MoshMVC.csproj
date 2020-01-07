@@ -164,6 +164,10 @@
     <Compile Include="Migrations\201912300302316_add column in Movies.designer.cs">
       <DependentUpon>201912300302316_add column in Movies.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202001070215196_Customer Name length = 10.cs" />
+    <Compile Include="Migrations\202001070215196_Customer Name length = 10.designer.cs">
+      <DependentUpon>202001070215196_Customer Name length = 10.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\EFDbContext.cs" />
@@ -195,7 +199,6 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
-    <None Include="T4MVC.tt.settings.xml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -254,6 +257,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201912300302316_add column in Movies.resx">
       <DependentUpon>201912300302316_add column in Movies.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001070215196_Customer Name length = 10.resx">
+      <DependentUpon>202001070215196_Customer Name length = 10.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

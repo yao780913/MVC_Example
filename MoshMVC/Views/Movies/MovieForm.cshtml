@@ -57,6 +57,7 @@
 
         @* It must be exist, to check this submit is for new or edit *@
         @Html.HiddenFor(m => m.Movie.Id)
+        @Html.AntiForgeryToken()
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Save" class="btn btn-default" />

@@ -6,6 +6,9 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using AutoMapper;
+using MoshMVC.Dtos;
+using MoshMVC.Models;
 
 namespace MoshMVC
 {
@@ -13,6 +16,7 @@ namespace MoshMVC
     {
         protected void Application_Start()
         {
+            MappingProfile.Configuration();
             GlobalConfiguration.Configure(WebApiConfig.Register);
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);

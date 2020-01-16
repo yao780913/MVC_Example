@@ -5,6 +5,8 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using AutoMapper;
+using MoshMVC.Dtos;
 
 namespace MoshMVC.Controllers.Api
 {
@@ -30,19 +32,21 @@ namespace MoshMVC.Controllers.Api
         [HttpGet]
         public IHttpActionResult Get(int id)
         {
+            
             var movie = _dbContext.Movies
                 .FirstOrDefault(m => m.Id == id);
 
             if (movie == null)
                 return NotFound();
 
-            return Ok(movie);
+            //return Ok(movie);
+            return Ok(Mapper.Map<Movie, MovieDto>(movie));
         }
 
         [HttpPost]
         public IHttpActionResult Post(Movie movie)
         {
-
+            return Ok();
         }
     }
 }

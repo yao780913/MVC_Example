@@ -21,7 +21,7 @@ namespace MoshMVC.Controllers.Api
         [HttpGet]
         public IHttpActionResult Get()
         {
-            var movies = _dbContext.Movies.ToList();
+            var movies = _dbContext.Movies.Select(Mapper.Map<Movie, MovieDto>).ToList();
 
             if (movies == null)
                 return NotFound();
@@ -32,20 +32,42 @@ namespace MoshMVC.Controllers.Api
         [HttpGet]
         public IHttpActionResult Get(int id)
         {
-            
             var movie = _dbContext.Movies
                 .FirstOrDefault(m => m.Id == id);
 
             if (movie == null)
                 return NotFound();
 
-            //return Ok(movie);
             return Ok(Mapper.Map<Movie, MovieDto>(movie));
         }
 
         [HttpPost]
-        public IHttpActionResult Post(Movie movie)
+        public IHttpActionResult Post(MovieDto movieDto)
         {
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            var movie = Mapper.Map<MovieDto, Movie>(movieDto);
+            _dbContext.Movies.Add(movie);
+            _dbContext.SaveChanges();
+
+            return Created(new Uri($"{Request.RequestUri}/{movie.Id}"), movieDto);
+        }
+
+        [HttpPut]
+        public IHttpActionResult Put(int id, MovieDto movieDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            var movieInDb = _dbContext.Movies.FirstOrDefault(m => m.Id == id);
+            if (movieInDb == null)
+                return BadRequest();
+
+            Mapper.Map(movieDto, movieInDb);
+
+            _dbContext.SaveChanges();
+
             return Ok();
         }
     }

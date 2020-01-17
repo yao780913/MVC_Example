@@ -47,6 +47,8 @@
 {
     <script>
         $(function () {
+            $('#movies').DataTable();
+
             $('#movies').on('click', '.js-delete', function () {
                 var button = $(this);
                 bootbox.confirm('Are you sure to delete this movie?', function (result) {

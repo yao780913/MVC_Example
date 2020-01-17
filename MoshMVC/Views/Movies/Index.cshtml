@@ -19,11 +19,12 @@
     return;
 }
 
-<table class="table table-bordered table-hover">
+<table id="movies" class="table table-bordered table-hover">
     <thead>
         <tr>
             <th>MovieName</th>
             <th>Genre</th>
+            <th>Delete</th>
         </tr>
     </thead>
     <tbody>
@@ -33,8 +34,35 @@
             @*<td>@Html.ActionLink(movie.Name, "Detail", "Movies", new { id = movie.Id }, null)</td>*@
             <td>@Html.ActionLink(movie.Name, "Edit", "Movies", new { id = movie.Id }, null)</td>
             <td>@movie.Genre.Name</td>
+            <td>
+                <Button data-movie-id="@movie.Id" type="button" class="btn-link js-delete">Delete</Button>
+            </td>
         </tr>
         }
     </tbody>
 </table>
 
+
+@section scripts
+{
+    <script>
+        $(function () {
+            $('#movies .js-delete').on('click', function () {
+                var button = $(this);
+                if (confirm('Are you sure to delete this movie?')) {
+                    $.ajax({
+                        url: 'api/movies/' + button.attr('data-movie-id'),
+                        method: "DELETE",
+                        success: function () {
+                            alert('success');
+                            button.parents('tr').remove();
+                        },
+                        error: function () {
+                            alert("failed")
+                        },
+                    })
+                }
+            })
+        })
+    </script>
+}

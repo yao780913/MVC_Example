@@ -33,7 +33,7 @@ namespace MoshMVC.Controllers.Api
         public IHttpActionResult Get(int id)
         {
             var movie = _dbContext.Movies
-                .FirstOrDefault(m => m.Id == id);
+                .SingleOrDefault(m => m.Id == id);
 
             if (movie == null)
                 return NotFound();
@@ -55,17 +55,30 @@ namespace MoshMVC.Controllers.Api
         }
 
         [HttpPut]
-        public IHttpActionResult Put(int id, MovieDto movieDto)
+        public IHttpActionResult Put(int id, [FromBody]MovieDto movieDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
 
-            var movieInDb = _dbContext.Movies.FirstOrDefault(m => m.Id == id);
+            var movieInDb = _dbContext.Movies.SingleOrDefault(m => m.Id == id);
             if (movieInDb == null)
                 return BadRequest();
 
             Mapper.Map(movieDto, movieInDb);
 
+            _dbContext.SaveChanges();
+
+            return Ok();
+        }
+
+        [HttpDelete]
+        public IHttpActionResult Delete(int id)
+        {
+            var movieInDb = _dbContext.Movies.SingleOrDefault(m => m.Id == id);
+            if (movieInDb == null)
+                return NotFound();
+
+            _dbContext.Movies.Remove(movieInDb);
             _dbContext.SaveChanges();
 
             return Ok();

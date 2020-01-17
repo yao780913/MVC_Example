@@ -1,6 +1,7 @@
 ﻿using MoshMVC.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -21,7 +22,10 @@ namespace MoshMVC.Controllers.Api
         [HttpGet]
         public IHttpActionResult Get()
         {
-            var movies = _dbContext.Movies.Select(Mapper.Map<Movie, MovieDto>).ToList();
+            var movies = _dbContext.Movies
+                .Include(m => m.Genre)
+                .Select(Mapper.Map<Movie, MovieDto>)
+                .ToList();
 
             if (movies == null)
                 return NotFound();
@@ -33,7 +37,7 @@ namespace MoshMVC.Controllers.Api
         public IHttpActionResult Get(int id)
         {
             var movie = _dbContext.Movies
-                .FirstOrDefault(m => m.Id == id);
+                .SingleOrDefault(m => m.Id == id);
 
             if (movie == null)
                 return NotFound();
@@ -55,17 +59,30 @@ namespace MoshMVC.Controllers.Api
         }
 
         [HttpPut]
-        public IHttpActionResult Put(int id, MovieDto movieDto)
+        public IHttpActionResult Put(int id, [FromBody]MovieDto movieDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
 
-            var movieInDb = _dbContext.Movies.FirstOrDefault(m => m.Id == id);
+            var movieInDb = _dbContext.Movies.SingleOrDefault(m => m.Id == id);
             if (movieInDb == null)
                 return BadRequest();
 
             Mapper.Map(movieDto, movieInDb);
 
+            _dbContext.SaveChanges();
+
+            return Ok();
+        }
+
+        [HttpDelete]
+        public IHttpActionResult Delete(int id)
+        {
+            var movieInDb = _dbContext.Movies.SingleOrDefault(m => m.Id == id);
+            if (movieInDb == null)
+                return NotFound();
+
+            _dbContext.Movies.Remove(movieInDb);
             _dbContext.SaveChanges();
 
             return Ok();

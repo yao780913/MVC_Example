@@ -30,7 +30,7 @@
 {
     <script>
         $(function () {
-            $('#movies').DataTable({
+            var table = $('#movies').DataTable({
                 ajax: {
                     url: '/api/movies',
                     dataSrc: '',
@@ -43,7 +43,7 @@
                         }
                     },
                     {
-                        data: 'Name'
+                        data: 'Genre.Name'
                     },
                     {
                         data: 'Id',
@@ -63,7 +63,7 @@
                             method: "DELETE",
                             success: function () {
                                 bootbox.alert('success');
-                                button.parents('tr').remove();
+                                table.row(button.parents("tr")).remove().draw();
                             },
                             error: function () {
                                 bootbox.alert("failed");

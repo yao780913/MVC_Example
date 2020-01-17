@@ -16,6 +16,8 @@ namespace MoshMVC
            {
                cfg.CreateMap<Movie, MovieDto>();
                cfg.CreateMap<MovieDto, Movie>();
+               cfg.CreateMap<GenreDto, Genre>();
+               cfg.CreateMap<Genre, GenreDto>();
            });
         }
     }

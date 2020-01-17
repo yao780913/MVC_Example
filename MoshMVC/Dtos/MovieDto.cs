@@ -16,6 +16,8 @@ namespace MoshMVC.Dtos
 
         public int GenreId { get; set; }
 
+        public GenreDto Genre { get; set; }
+
         public byte NumberInStock { get; set; }
 
         public DateTime ReleaseDate { get; set; }

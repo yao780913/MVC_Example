@@ -1,6 +1,7 @@
 ﻿using MoshMVC.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -21,7 +22,10 @@ namespace MoshMVC.Controllers.Api
         [HttpGet]
         public IHttpActionResult Get()
         {
-            var movies = _dbContext.Movies.Select(Mapper.Map<Movie, MovieDto>).ToList();
+            var movies = _dbContext.Movies
+                .Include(m => m.Genre)
+                .Select(Mapper.Map<Movie, MovieDto>)
+                .ToList();
 
             if (movies == null)
                 return NotFound();

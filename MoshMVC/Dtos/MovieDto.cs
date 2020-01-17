@@ -9,6 +9,8 @@ namespace MoshMVC.Dtos
 {
     public class MovieDto
     {
+        public int Id { get; set; }
+
         [Required]
         public string Name { get; set; }
 

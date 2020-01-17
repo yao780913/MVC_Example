@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MoshMVC.Models.Movie> 
+﻿@model IEnumerable<MoshMVC.Models.Movie>
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -30,14 +30,14 @@
     <tbody>
         @foreach (var movie in Model)
         {
-        <tr>
-            @*<td>@Html.ActionLink(movie.Name, "Detail", "Movies", new { id = movie.Id }, null)</td>*@
-            <td>@Html.ActionLink(movie.Name, "Edit", "Movies", new { id = movie.Id }, null)</td>
-            <td>@movie.Genre.Name</td>
-            <td>
-                <Button data-movie-id="@movie.Id" type="button" class="btn-link js-delete">Delete</Button>
-            </td>
-        </tr>
+            <tr>
+                @*<td>@Html.ActionLink(movie.Name, "Detail", "Movies", new { id = movie.Id }, null)</td>*@
+                <td>@Html.ActionLink(movie.Name, "Edit", "Movies", new { id = movie.Id }, null)</td>
+                <td>@movie.Genre.Name</td>
+                <td>
+                    <Button data-movie-id="@movie.Id" type="button" class="btn-link js-delete">Delete</Button>
+                </td>
+            </tr>
         }
     </tbody>
 </table>
@@ -47,22 +47,24 @@
 {
     <script>
         $(function () {
-            $('#movies .js-delete').on('click', function () {
+            $('#movies').on('click', '.js-delete', function () {
                 var button = $(this);
-                if (confirm('Are you sure to delete this movie?')) {
-                    $.ajax({
-                        url: 'api/movies/' + button.attr('data-movie-id'),
-                        method: "DELETE",
-                        success: function () {
-                            alert('success');
-                            button.parents('tr').remove();
-                        },
-                        error: function () {
-                            alert("failed")
-                        },
-                    })
-                }
-            })
-        })
+                bootbox.confirm('Are you sure to delete this movie?', function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: 'api/movies/' + button.attr('data-movie-id'),
+                            method: "DELETE",
+                            success: function () {
+                                bootbox.alert('success');
+                                button.parents('tr').remove();
+                            },
+                            error: function () {
+                                bootbox.alert("failed");
+                            }
+                        });
+                    }
+                });
+            });
+        });
     </script>
 }

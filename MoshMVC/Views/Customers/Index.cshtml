@@ -13,21 +13,104 @@
     return;
 }
 
-<table class="table table-bordered table-hover">
+<table id="customers" class="table">
     <thead>
         <tr>
             <th>Customer</th>
             <th>Membership Type</th>
+            <th>Edit</th>
+            <th>Modal Detail</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var customer in Model)
-        {
-            <tr>
-                <td>@Html.ActionLink(customer.Name, "Detail", "Customers", new { id = customer.Id }, null)</td>
-                <td>@customer.MembershipType.Name</td>
-            </tr>
-        }
     </tbody>
 </table>
 
+<div id="modalDetail" class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Detail</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalDetail-body">
+                <h4 id="modalDetail-name"></h4>
+                <ul id="modalDetail-list"></ul>
+            </div>
+            <div class="modal-footer">
+                Nothing
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts
+{
+    <script>
+        $(function () {
+            let table = $('#customers').DataTable({
+                ajax: {
+                    url: '/api/customers',
+                    dataSrc: '',
+                },
+                columns: [
+                    {
+                        data: 'Customer',
+                        render: function (data, type, customer) {
+                            return "<a href='/Customers/detail/" + customer.Id + "'>" + customer.Name + "</a>";
+                        }
+                    },
+                    {
+                        data: 'MembershipType.Name'
+                    },
+                    {
+                        data: 'Id',
+                        render: function (data) {
+                            return "<Button class='btn btn-link js-edit' data-customer-id='" + data + "'>Edit</Button>";
+                        }
+                    },
+                    {
+                        data: 'Id',
+                        render: function (data) {
+                            return "<Button class='btn btn-link js-modal-detail' data-customer-id='" + data + "' data-toggle='modal' data-target='#modalDetail'>Detail</Button>";
+                        }
+                    }
+                ]
+            });
+
+
+            $('#customers')
+                .on('click', '.js-modal-detail', function () {
+                    var $button = $(this);
+                    $modalDetailName = $('#modalDetail-name');
+                    $modalDetailList = $('#modalDetail-list');
+                    $.ajax({
+                        url: 'api/customers/' + $button.attr('data-customer-id'),
+                        method: 'Get',
+                        success: function (data) {
+                            console.log(data);
+                            $modalDetailName.append($('<h4></h4>').text(data.Name));
+                            $modalDetailList.append($('<li></li>').text(data.Id));
+                            $modalDetailList.append($('<li></li>').text(data.Name));
+                            $modalDetailList.append($('<li></li>').text(data.MembershipType.Name));
+                        },
+                        error: function (data) {
+                            console.log(data);
+                        }
+                    });
+                })
+                .on('click', 'js-edit', function () {
+                    console.log('console');
+                });
+
+            // clear data
+            $('#modalDetail').on('hide.bs.modal', function (e) {
+                $('#modalDetail-list').empty();
+                $('#modalDetail-name').empty();
+            })
+        });
+    </script>
+}

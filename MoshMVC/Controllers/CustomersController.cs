@@ -18,6 +18,7 @@ namespace MoshMVC.Controllers
         // GET: Customers
         public virtual ActionResult Index()
         {
+            
             return View(_dbContext.Customers.Include(c => c.MembershipType));
         }
 
@@ -32,5 +33,34 @@ namespace MoshMVC.Controllers
 
             return View(customer);
         }
+
+        public ActionResult EditPartial(int id)
+        {
+            var customer = _dbContext.Customers.FirstOrDefault(c => c.Id == id);
+            ViewBag.MembershipTypeList = new SelectList(_dbContext.MembershipTypes, nameof(MembershipType.Id), nameof(MembershipType.Name));
+            if (customer == null)
+                return HttpNotFound();
+
+            return PartialView("_EditPartial", customer);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditPartial(Customer customer)
+        {
+            var customerInDb = _dbContext.Customers.FirstOrDefault(c => c.Id == customer.Id);
+
+            if (customerInDb == null)
+                return HttpNotFound();
+
+            customerInDb.MembershipTypeId = customer.MembershipTypeId;
+            customerInDb.Name = customer.Name;
+
+            _dbContext.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+
+
     }
 }

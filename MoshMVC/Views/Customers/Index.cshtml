@@ -46,6 +46,8 @@
     </div>
 </div>
 
+<div id="modalEdit" class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+</div>
 
 @section scripts
 {
@@ -69,7 +71,7 @@
                     {
                         data: 'Id',
                         render: function (data) {
-                            return "<Button class='btn btn-link js-edit' data-customer-id='" + data + "'>Edit</Button>";
+                            return "<Button class='btn btn-link js-edit' data-customer-id='" + data + "' data-toggle='modal' data-target='#modalEdit'>Edit</Button>";
                         }
                     },
                     {
@@ -81,10 +83,9 @@
                 ]
             });
 
-
             $('#customers')
                 .on('click', '.js-modal-detail', function () {
-                    var $button = $(this);
+                    let $button = $(this);
                     $modalDetailName = $('#modalDetail-name');
                     $modalDetailList = $('#modalDetail-list');
                     $.ajax({
@@ -99,18 +100,42 @@
                         },
                         error: function (data) {
                             console.log(data);
+                        },
+                        complete: function () {
+                            console.log('complete');
                         }
                     });
                 })
-                .on('click', 'js-edit', function () {
-                    console.log('console');
+                .on('click', '.js-edit', function () {
+                    console.log('js edit');
+                    let $button = $(this);
+                    $.ajax({
+                        url: 'customers/EditPartial/' + $button.attr('data-customer-id'),
+                        method: 'Get',
+                        success: function (data) {
+                            //console.log(data);
+                            let $modal = $('#modalEdit');
+                            $modal.html(data);
+                        },
+                        error: function () {
+                            console.log('error');
+                        }
+                    })
+
                 });
+
+            // use ajaxStart and ajaxSuccess to control progress bar
+            $(document).ajaxStart(function () {
+                console.log('ajaxStart');
+            }).ajaxSuccess(function () {
+                console.log('ajaxSuccess');
+            });
 
             // clear data
             $('#modalDetail').on('hide.bs.modal', function (e) {
                 $('#modalDetail-list').empty();
                 $('#modalDetail-name').empty();
-            })
+            });
         });
     </script>
 }
